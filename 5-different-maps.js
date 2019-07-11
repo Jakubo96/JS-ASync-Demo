@@ -54,6 +54,15 @@ function switchMapCancel() {
     ).subscribe(console.log);
 }
 
+function switchMapRandomized() {
+    const randomDelay = () => Math.round(Math.random() * 1000);
+    
+    baseObs
+        .pipe(
+            ops.switchMap(value => rxjs.of(value * 10).pipe(ops.delay(randomDelay())))
+        ).subscribe(console.log);
+}
+
 // ehxaustMap === map => exhaustAll
 
 function exhaustMapNoIgnore() {
@@ -84,6 +93,7 @@ function magicalEndpoint(value) {
 
 // switchMapNoCancel();
 // switchMapCancel();
+switchMapRandomized();
 
 // exhaustMapNoIgnore();
 // exhaustMapIgnore();

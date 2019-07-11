@@ -14,5 +14,30 @@ function concat() {
         .subscribe(console.log);
 }
 
+const firstInterval = rxjs.interval(1000)
+    .pipe(
+        ops.mapTo('FIRST'),
+        ops.take(5)
+    );
+
+const secondInterval = rxjs.interval(2500)
+    .pipe(
+        ops.mapTo('SECOND'),
+        ops.take(5)
+    );
+
+function intervalMerge() {
+    rxjs.merge(firstInterval, secondInterval)
+        .subscribe(console.log)
+}
+
+function intervalConcat() {
+    rxjs.concat(firstInterval, secondInterval)
+        .subscribe(console.log)
+}
+
 // merge();
 // concat();
+
+// intervalMerge();
+// intervalConcat();
