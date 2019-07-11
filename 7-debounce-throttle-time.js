@@ -15,7 +15,6 @@ function debounceTimeFilter() {
     ).subscribe(console.log);
 }
 
-
 function debounceTimeRandom() {
     const randomDelay = () => Math.round(Math.random() * 1000);
 
@@ -28,7 +27,31 @@ function debounceTimeRandom() {
         .subscribe(console.log)
 }
 
+function throttleTimeNoFilter() {
+    rxjs.interval(500).pipe(
+        ops.take(10),
+        ops.throttleTime(400)
+    ).subscribe(console.log);
+}
+
+function throttleTimeFilter() {
+    rxjs.interval(500).pipe(
+        ops.take(10),
+        ops.throttleTime(2000)
+    ).subscribe(console.log);
+}
+
+function throttleTimeFastNoFilter() {
+    rxjs.interval(500).pipe(
+        ops.take(10),
+        ops.throttleTime(1)
+    ).subscribe(console.log);
+}
 
 // debounceTimeNoFilter();
 // debounceTimeFilter();
 // debounceTimeRandom();
+
+// throttleTimeNoFilter();
+// throttleTimeFilter();
+// throttleTimeFastNoFilter();
