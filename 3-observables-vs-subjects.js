@@ -1,10 +1,14 @@
 const rxjs = require('rxjs');
+const ops = require('rxjs/operators');
 
 function observableVersionShowcase() {
     const observableWithRandomValue = new rxjs.Observable(subscriber => {
         subscriber.next(randomValue());
         subscriber.complete();
-    });
+    })
+        .pipe(
+            ops.tap(() => console.log('side effect'))
+        );
 
     observableWithRandomValue.subscribe(value => console.log(`First subscription: ${value}`));
     observableWithRandomValue.subscribe(value => console.log(`Second subscription: ${value}`));
@@ -13,8 +17,8 @@ function observableVersionShowcase() {
 
 function subjectVersionShowcase() {
     const subjectWithRandomValue = new rxjs.Subject();
-    subjectWithRandomValue.next(randomValue());
 
+    subjectWithRandomValue.next(randomValue());
 
     subjectWithRandomValue.subscribe(value => console.log(`First subscription: ${value}`));
     subjectWithRandomValue.subscribe(value => console.log(`Second subscription: ${value}`));
@@ -28,7 +32,10 @@ function observableMulticastBySubject() {
     const observableWithRandomValue = new rxjs.Observable(subscriber => {
         subscriber.next(randomValue());
         subscriber.complete();
-    });
+    })
+        .pipe(
+            ops.tap(() => console.log('side effect'))
+        );
 
     const subject = new rxjs.Subject();
 
