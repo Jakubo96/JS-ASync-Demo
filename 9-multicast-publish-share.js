@@ -72,6 +72,36 @@ function shareExampleNoDelay() {
     sharedObs.subscribe(console.log);
 }
 
+
+function refCountDelayExample() {
+    const publishedRefCountObs = baseObs
+        .pipe(
+            ops.delay(1000),
+            ops.publish(),
+            ops.refCount()
+        );
+
+    publishedRefCountObs.subscribe(console.log);
+    publishedRefCountObs.subscribe(console.log);
+    publishedRefCountObs.subscribe(console.log);
+    publishedRefCountObs.subscribe(console.log);
+    publishedRefCountObs.subscribe(console.log);
+}
+
+function refCountNoDelayExample() {
+    const publishedRefCountObs = baseObs
+        .pipe(
+            ops.publish(),
+            ops.refCount()
+        );
+
+    publishedRefCountObs.subscribe(console.log);
+    publishedRefCountObs.subscribe(console.log);
+    publishedRefCountObs.subscribe(console.log);
+    publishedRefCountObs.subscribe(console.log);
+    publishedRefCountObs.subscribe(console.log);
+}
+
 function randomValue() {
     return Math.round(Math.random() * 100);
 }
@@ -83,3 +113,6 @@ function randomValue() {
 
 // shareExampleDelay();
 // shareExampleNoDelay();
+
+// refCountDelayExample();
+// refCountNoDelayExample();
