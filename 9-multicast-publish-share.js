@@ -102,6 +102,43 @@ function refCountNoDelayExample() {
     publishedRefCountObs.subscribe(console.log);
 }
 
+const fiveRandomValues = new rxjs.Observable(subscriber => {
+    subscriber.next(randomValue());
+    subscriber.next(randomValue());
+    subscriber.next(randomValue());
+    subscriber.next(randomValue());
+    subscriber.next(randomValue());
+    subscriber.complete();
+}).pipe(
+    ops.tap(() => console.log('side effect'))
+);
+
+function shareReplayDelayExample() {
+    const sharedReplayObs = fiveRandomValues
+        .pipe(
+            ops.delay(1000),
+            ops.shareReplay(3)
+        );
+
+    sharedReplayObs.subscribe(value => console.log(`First: ${value}`));
+    sharedReplayObs.subscribe(value => console.log(`Second: ${value}`));
+    sharedReplayObs.subscribe(value => console.log(`Third: ${value}`));
+    sharedReplayObs.subscribe(value => console.log(`Fourth: ${value}`));
+    sharedReplayObs.subscribe(value => console.log(`Fifth: ${value}`));
+}
+
+function shareReplayNoDelayExample() {
+    const sharedReplayObs = fiveRandomValues.pipe(
+        ops.shareReplay(2)
+    );
+
+    sharedReplayObs.subscribe(value => console.log(`First: ${value}`));
+    sharedReplayObs.subscribe(value => console.log(`Second: ${value}`));
+    sharedReplayObs.subscribe(value => console.log(`Third: ${value}`));
+    sharedReplayObs.subscribe(value => console.log(`Fourth: ${value}`));
+    sharedReplayObs.subscribe(value => console.log(`Fifth: ${value}`));
+}
+
 function randomValue() {
     return Math.round(Math.random() * 100);
 }
@@ -116,3 +153,6 @@ function randomValue() {
 
 // refCountDelayExample();
 // refCountNoDelayExample();
+
+// shareReplayDelayExample();
+// shareReplayNoDelayExample();
