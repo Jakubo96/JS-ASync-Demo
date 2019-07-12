@@ -93,7 +93,7 @@ function magicalEndpoint(value) {
 
 // switchMapNoCancel();
 // switchMapCancel();
-switchMapRandomized();
+// switchMapRandomized();
 
 // exhaustMapNoIgnore();
 // exhaustMapIgnore();
