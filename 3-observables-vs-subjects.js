@@ -46,6 +46,19 @@ function observableMulticastBySubject() {
     observableWithRandomValue.subscribe(subject);
 }
 
+
+function promiseVersionShowcase() {
+    const promise = new Promise(resolve => {
+        console.log('side effect');
+        resolve(randomValue());
+    });
+    setTimeout(() => {
+        promise.then(console.log);
+        promise.then(console.log);
+        promise.then(console.log);
+    }, 1000);
+}
+
 // BONUS!
 
 function behaviorSubject() {
@@ -97,6 +110,7 @@ function randomValue() {
 // observableVersionShowcase();
 // subjectVersionShowcase();
 // observableMulticastBySubject();
+// promiseVersionShowcase();
 
 // behaviorSubject();
 // replaySubject();
