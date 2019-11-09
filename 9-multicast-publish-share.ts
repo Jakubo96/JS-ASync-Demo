@@ -1,11 +1,11 @@
-const rxjs = require('rxjs');
-const ops = require('rxjs/operators');
+import { ConnectableObservable, Observable, Subject } from 'rxjs';
+import { delay, multicast, publish, refCount, share, shareReplay, tap } from 'rxjs/operators';
 
-const baseObs = new rxjs.Observable(subscriber => {
+const baseObs = new Observable(subscriber => {
     subscriber.next(randomValue());
     subscriber.complete();
 }).pipe(
-    ops.tap(() => console.log('side effect'))
+    tap(() => console.log('side effect'))
 );
 
 function classicExample() {
@@ -18,8 +18,8 @@ function classicExample() {
 
 function multicastExample() {
     const multicastObs = baseObs.pipe(
-        ops.multicast(() => new rxjs.Subject())
-    );
+        multicast(() => new Subject())
+    ) as ConnectableObservable<number>;
 
     multicastObs.subscribe(console.log);
     multicastObs.subscribe(console.log);
@@ -32,8 +32,8 @@ function multicastExample() {
 
 function publishExample() {
     const publishedObs = baseObs.pipe(
-        ops.publish()
-    );
+        publish()
+    ) as ConnectableObservable<number>;
 
     publishedObs.subscribe(console.log);
     publishedObs.subscribe(console.log);
@@ -48,8 +48,8 @@ function publishExample() {
 function shareExampleDelay() {
     const sharedObs = baseObs
         .pipe(
-            ops.delay(1000),
-            ops.share()
+            delay(1000),
+            share()
         );
 
     sharedObs.subscribe(console.log);
@@ -62,7 +62,7 @@ function shareExampleDelay() {
 function shareExampleNoDelay() {
     const sharedObs = baseObs
         .pipe(
-            ops.share()
+            share()
         );
 
     sharedObs.subscribe(console.log);
@@ -76,9 +76,9 @@ function shareExampleNoDelay() {
 function refCountDelayExample() {
     const publishedRefCountObs = baseObs
         .pipe(
-            ops.delay(1000),
-            ops.publish(),
-            ops.refCount()
+            delay(1000),
+            publish(),
+            refCount()
         );
 
     publishedRefCountObs.subscribe(console.log);
@@ -91,8 +91,8 @@ function refCountDelayExample() {
 function refCountNoDelayExample() {
     const publishedRefCountObs = baseObs
         .pipe(
-            ops.publish(),
-            ops.refCount()
+            publish(),
+            refCount()
         );
 
     publishedRefCountObs.subscribe(console.log);
@@ -102,7 +102,7 @@ function refCountNoDelayExample() {
     publishedRefCountObs.subscribe(console.log);
 }
 
-const fiveRandomValues = new rxjs.Observable(subscriber => {
+const fiveRandomValues = new Observable(subscriber => {
     subscriber.next(randomValue());
     subscriber.next(randomValue());
     subscriber.next(randomValue());
@@ -110,14 +110,14 @@ const fiveRandomValues = new rxjs.Observable(subscriber => {
     subscriber.next(randomValue());
     subscriber.complete();
 }).pipe(
-    ops.tap(() => console.log('side effect'))
+    tap(() => console.log('side effect'))
 );
 
 function shareReplayDelayExample() {
     const sharedReplayObs = fiveRandomValues
         .pipe(
-            ops.delay(1000),
-            ops.shareReplay(3)
+            delay(1000),
+            shareReplay(3)
         );
 
     sharedReplayObs.subscribe(value => console.log(`First: ${value}`));
@@ -129,7 +129,7 @@ function shareReplayDelayExample() {
 
 function shareReplayNoDelayExample() {
     const sharedReplayObs = fiveRandomValues.pipe(
-        ops.shareReplay(2)
+        shareReplay(2)
     );
 
     sharedReplayObs.subscribe(value => console.log(`First: ${value}`));

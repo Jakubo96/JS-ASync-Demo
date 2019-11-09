@@ -1,11 +1,11 @@
-const rxjs = require('rxjs');
-const ops = require('rxjs/operators');
+import { concatMap, delay, exhaustMap, flatMap, map, mergeAll, switchMap, take } from 'rxjs/operators';
+import { interval, of } from 'rxjs';
 
-const baseObs = rxjs.interval(500).pipe(ops.take(10));
+const baseObs = interval(500).pipe(take(10));
 
 function simpleMap() {
     baseObs.pipe(
-        ops.map(value => value * 10)
+        map(value => value * 10)
     ).subscribe(console.log);
 }
 
@@ -13,7 +13,7 @@ function simpleMap() {
 
 function mapWithInnerObservable() {
     baseObs.pipe(
-        ops.map(value => magicalEndpoint(value))
+        map(value => magicalEndpoint(value))
     ).subscribe(value => {
         // value.subscribe(innerValue => console.log(innerValue));
         console.log(value);
@@ -22,21 +22,21 @@ function mapWithInnerObservable() {
 
 function mapAndMergeAll() {
     baseObs.pipe(
-        ops.map(value => magicalEndpoint(value)),
-        ops.mergeAll()
+        map(value => magicalEndpoint(value)),
+        mergeAll()
     ).subscribe(console.log);
 }
 
-function flatMap() {
+function flatMapExample() {
     baseObs.pipe(
-        ops.flatMap(value => magicalEndpoint(value))
+        flatMap(value => magicalEndpoint(value))
     ).subscribe(console.log);
 }
 
 // concatMap === map => concatAll
-function concatMap() {
+function concatMapExample() {
     baseObs.pipe(
-        ops.concatMap(value => magicalEndpoint(value))
+        concatMap(value => magicalEndpoint(value))
     ).subscribe(console.log);
 }
 
@@ -44,22 +44,22 @@ function concatMap() {
 
 function switchMapNoCancel() {
     baseObs.pipe(
-        ops.switchMap(value => rxjs.of(value * 10).pipe(ops.delay(400)))
+        switchMap(value => of(value * 10).pipe(delay(400)))
     ).subscribe(console.log);
 }
 
 function switchMapCancel() {
     baseObs.pipe(
-        ops.switchMap(value => rxjs.of(value * 10).pipe(ops.delay(600)))
+        switchMap(value => of(value * 10).pipe(delay(600)))
     ).subscribe(console.log);
 }
 
 function switchMapRandomized() {
     const randomDelay = () => Math.round(Math.random() * 1000);
-    
+
     baseObs
         .pipe(
-            ops.switchMap(value => rxjs.of(value * 10).pipe(ops.delay(randomDelay())))
+            switchMap(value => of(value * 10).pipe(delay(randomDelay())))
         ).subscribe(console.log);
 }
 
@@ -67,19 +67,19 @@ function switchMapRandomized() {
 
 function exhaustMapNoIgnore() {
     baseObs.pipe(
-        ops.exhaustMap(value => rxjs.of(value * 10).pipe(ops.delay(400)))
+        exhaustMap(value => of(value * 10).pipe(delay(400)))
     ).subscribe(console.log);
 }
 
 function exhaustMapIgnore() {
     baseObs.pipe(
-        ops.exhaustMap(value => rxjs.of(value * 10).pipe(ops.delay(1000)))
+        exhaustMap(value => of(value * 10).pipe(delay(1000)))
     ).subscribe(console.log);
 }
 
 function magicalEndpoint(value) {
     const delayTime = Math.round(Math.random() * 5000);
-    return rxjs.of(value * 10).pipe(ops.delay(delayTime));
+    return of(value * 10).pipe(delay(delayTime));
 }
 
 
@@ -87,9 +87,9 @@ function magicalEndpoint(value) {
 
 // mapWithInnerObservable();
 // mapAndMergeAll();
-// flatMap();
+// flatMapExample();
 
-// concatMap();
+// concatMapExample();
 
 // switchMapNoCancel();
 // switchMapCancel();

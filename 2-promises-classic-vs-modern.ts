@@ -1,4 +1,5 @@
-const axios = require('axios');
+import axios from 'axios';
+
 const baconUrl = 'https://baconipsum.com/api/?type=all-meat&paras=2&start-with-lorem=1';
 
 function classicPromiseVersion() {

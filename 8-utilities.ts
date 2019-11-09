@@ -1,22 +1,22 @@
-const rxjs = require('rxjs');
-const ops = require('rxjs/operators');
+import { Observable, of } from 'rxjs';
+import { finalize, tap } from 'rxjs/operators';
 
 function tapLoggingExample() {
-    rxjs.of(1, 2, 3)
+    of(1, 2, 3)
         .pipe(
-            ops.tap(() => console.log('LOG STH'))
+            tap(() => console.log('LOG STH'))
         )
         .subscribe(console.log);
 }
 
 function tapNoSubscribeExample() {
-    rxjs.of(1, 2, 3)
+    of(1, 2, 3)
         .pipe(
-            ops.tap(console.log)
+            tap(console.log)
         ).subscribe();
 }
 
-const complexObs = new rxjs.Observable(subscriber => {
+const complexObs = new Observable(subscriber => {
     subscriber.next(1);
     subscriber.next(2);
     subscriber.error('UNAUTHORIZED');
@@ -34,7 +34,7 @@ function complexObsExample() {
 // show with no error and no complete
 function finalizeExample() {
     complexObs
-        .pipe(ops.finalize(() => console.log('Somehow completed (finalize)')))
+        .pipe(finalize(() => console.log('Somehow completed (finalize)')))
         .subscribe(value => console.log(`Next: ${value}`),
             error => console.log(`Error: ${error}`),
             () => console.log('Complete'));

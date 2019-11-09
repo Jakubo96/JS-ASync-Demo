@@ -1,13 +1,13 @@
-const rxjs = require('rxjs');
-const ops = require('rxjs/operators');
+import { AsyncSubject, BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 function observableVersionShowcase() {
-    const observableWithRandomValue = new rxjs.Observable(subscriber => {
+    const observableWithRandomValue = new Observable(subscriber => {
         subscriber.next(randomValue());
         subscriber.complete();
     })
         .pipe(
-            ops.tap(() => console.log('side effect'))
+            tap(() => console.log('side effect'))
         );
 
     observableWithRandomValue.subscribe(value => console.log(`First subscription: ${value}`));
@@ -16,7 +16,7 @@ function observableVersionShowcase() {
 }
 
 function subjectVersionShowcase() {
-    const subjectWithRandomValue = new rxjs.Subject();
+    const subjectWithRandomValue = new Subject();
 
     subjectWithRandomValue.next(randomValue());
 
@@ -29,15 +29,15 @@ function subjectVersionShowcase() {
 }
 
 function observableMulticastBySubject() {
-    const observableWithRandomValue = new rxjs.Observable(subscriber => {
+    const observableWithRandomValue = new Observable(subscriber => {
         subscriber.next(randomValue());
         subscriber.complete();
     })
         .pipe(
-            ops.tap(() => console.log('side effect'))
+            tap(() => console.log('side effect'))
         );
 
-    const subject = new rxjs.Subject();
+    const subject = new Subject();
 
     subject.subscribe(value => console.log(`First subscription: ${value}`));
     subject.subscribe(value => console.log(`Second subscription: ${value}`));
@@ -62,12 +62,12 @@ function promiseVersionShowcase() {
 // BONUS!
 
 function behaviorSubject() {
-    const behaviorSubject = new rxjs.BehaviorSubject();
+    const behaviorSubject = new BehaviorSubject('initial value');
     behaviorSubject.next('first');
     behaviorSubject.next('second');
     behaviorSubject.next('third');
-
     behaviorSubject.subscribe(console.log);
+
     // console.log(behaviorSubject.value);
 
     behaviorSubject.next('fourth');
@@ -76,7 +76,7 @@ function behaviorSubject() {
 }
 
 function replaySubject() {
-    const replaySubject = new rxjs.ReplaySubject(2); // you can also specify for how long these last 2 values should be stored
+    const replaySubject = new ReplaySubject(2); // you can also specify for how long these last 2 values should be stored
     replaySubject.next('first');
     replaySubject.next('second');
     replaySubject.next('third');
@@ -90,7 +90,7 @@ function replaySubject() {
 }
 
 function asyncSubject() {
-    const asyncSubject = new rxjs.AsyncSubject();
+    const asyncSubject = new AsyncSubject();
 
     asyncSubject.next('first');
     asyncSubject.next('second');
@@ -111,7 +111,7 @@ function randomValue() {
 // subjectVersionShowcase();
 // observableMulticastBySubject();
 // promiseVersionShowcase();
-
+//
 // behaviorSubject();
 // replaySubject();
 // asyncSubject();

@@ -1,50 +1,50 @@
-const rxjs = require('rxjs');
-const ops = require('rxjs/operators');
+import { interval, of, range } from 'rxjs';
+import { concatMap, debounceTime, delay, take, throttleTime } from 'rxjs/operators';
 
 function debounceTimeNoFilter() {
-    rxjs.interval(500).pipe(
-        ops.debounceTime(400),
-        ops.take(10)
+    interval(500).pipe(
+        debounceTime(400),
+        take(10)
     ).subscribe(console.log);
 }
 
 function debounceTimeFilter() {
-    rxjs.interval(500).pipe(
-        ops.debounceTime(600),
-        ops.take(10)
+    interval(500).pipe(
+        debounceTime(600),
+        take(10)
     ).subscribe(console.log);
 }
 
 function debounceTimeRandom() {
     const randomDelay = () => Math.round(Math.random() * 1000);
 
-    rxjs.range(1, 10)
+    range(1, 10)
         .pipe(
-            ops.concatMap(value => rxjs.of(value)
-                .pipe(ops.delay(randomDelay()))),
-            ops.debounceTime(500)
+            concatMap(value => of(value)
+                .pipe(delay(randomDelay()))),
+            debounceTime(500)
         )
         .subscribe(console.log)
 }
 
 function throttleTimeNoFilter() {
-    rxjs.interval(500).pipe(
-        ops.take(10),
-        ops.throttleTime(400)
+    interval(500).pipe(
+        take(10),
+        throttleTime(400)
     ).subscribe(console.log);
 }
 
 function throttleTimeFilter() {
-    rxjs.interval(500).pipe(
-        ops.take(10),
-        ops.throttleTime(2000)
+    interval(500).pipe(
+        take(10),
+        throttleTime(2000)
     ).subscribe(console.log);
 }
 
 function throttleTimeFastNoFilter() {
-    rxjs.interval(500).pipe(
-        ops.take(10),
-        ops.throttleTime(1)
+    interval(500).pipe(
+        take(10),
+        throttleTime(1)
     ).subscribe(console.log);
 }
 
