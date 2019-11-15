@@ -1,5 +1,5 @@
 import { interval, Observable, pipe, range } from 'rxjs';
-import { filter, map, reduce, scan, take } from 'rxjs/operators';
+import { count, filter, map, max, reduce, scan, take } from 'rxjs/operators';
 
 function successfulObservable() {
     const obs = new Observable(subscriber => {
