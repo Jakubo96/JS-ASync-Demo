@@ -19,7 +19,7 @@ function classicExample() {
 function multicastExample() {
     const multicastObs = baseObs.pipe(
         multicast(() => new Subject())
-    ) as ConnectableObservable<number>;
+    );
 
     multicastObs.subscribe(console.log);
     multicastObs.subscribe(console.log);
